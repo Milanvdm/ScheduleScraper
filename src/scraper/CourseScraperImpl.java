@@ -9,8 +9,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import schedule.Course;
+import util.Browser;
 
 public class CourseScraperImpl implements CourseScraper {
+	
+	public Browser browser = new Browser();
 
 	public Course getCourseWithId(String id, Date date) {
 		// TODO Auto-generated method stub
@@ -25,7 +28,9 @@ public class CourseScraperImpl implements CourseScraper {
 	private String getCourseUrl(String query) throws URISyntaxException, IOException {
 		String queryUrl = courseQuery(query);
 		
-		Document doc = Jsoup.connect(queryUrl).get();
+		String pageSource = browser.getPageSourceAfterJS(queryUrl);
+		
+		
 	}
 	
 	private String courseQuery(String query) throws URISyntaxException {

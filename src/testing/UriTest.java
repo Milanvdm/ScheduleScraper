@@ -41,7 +41,7 @@ public class UriTest {
 
 		System.out.println(driver.getPageSource());
 		
-		
+		driver.close();
 	}
 
 	public static void waitSeconds(int secons) {
@@ -84,6 +84,7 @@ public class UriTest {
 		uriBuilder	.setPath("/oa/find/")
 		.setFragment("/" + queryUri.toString());
 
+		System.out.println(uriBuilder.toString().replace("+", "%20"));
 
 		return uriBuilder.toString().replace("+", "%20");
 	}
