@@ -7,13 +7,20 @@ import java.util.Date;
 import org.apache.http.client.utils.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import schedule.Course;
 import util.Browser;
+import util.Util;
 
 public class CourseScraperImpl implements CourseScraper {
 	
 	public Browser browser = new Browser();
+	
+	private final static String COURSE_SEARCH_RESULTS = "div#results";
+	private final static String COURSE_SEARCH_HIT_CLASS = "search-result";
+	private final static String COURSE_SEARCH_HIT_TITLE = "title";
 
 	public Course getCourseWithId(String id, Date date) {
 		// TODO Auto-generated method stub
@@ -25,12 +32,19 @@ public class CourseScraperImpl implements CourseScraper {
 		return null;
 	}
 	
-	private String getCourseUrl(String query) throws URISyntaxException, IOException {
+	public String getCourseUrl(String query) throws URISyntaxException {
 		String queryUrl = courseQuery(query);
 		
 		String pageSource = browser.getPageSourceAfterJS(queryUrl);
 		
+		Document document = Jsoup.parse(pageSource);
 		
+		Element searchResults = document.select(COURSE_SEARCH_RESULTS).first();
+		Element result = searchResults.getElementsByClass(COURSE_SEARCH_HIT_CLASS).first();
+		
+		String url = result.getElementsByClass(COURSE_SEARCH_HIT_TITLE).first().getElementsByAttribute("href").attr("href");
+	
+		return url;
 	}
 	
 	private String courseQuery(String query) throws URISyntaxException {

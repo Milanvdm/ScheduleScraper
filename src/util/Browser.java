@@ -30,6 +30,8 @@ public class Browser {
 		driver.get(url);
 		
 	     waitForPageToLoad();
+	     
+	     Util.waitSeconds(1);
 
 		return driver.getPageSource();
 	}
@@ -42,10 +44,10 @@ public class Browser {
 	
 	private void waitForPageToLoad() {
 		
-		while ( !pageLoadStatus.equals("complete") ) {
+		do {
 			js = (JavascriptExecutor) driver;
 			pageLoadStatus = (String)js.executeScript("return document.readyState");
-		} 
+		} while ( !pageLoadStatus.equals("complete") );
 	}
 
 	

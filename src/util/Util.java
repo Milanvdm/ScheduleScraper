@@ -2,12 +2,12 @@ package util;
 
 public class Util {
 
-	public static void waitSeconds(int secons) {
-		System.out.print("Pausing for " + secons + " seconds: ");
+	public static void waitSeconds(int seconds) {
+		System.out.print("Pausing for " + seconds + " seconds: ");
 		try {
 			Thread.currentThread();		
 			int x = 1;
-			while(x <= secons) {
+			while(x <= seconds) {
 				Thread.sleep(1000);
 				System.out.print(" " + x );
 				x = x + 1;
