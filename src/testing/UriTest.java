@@ -3,87 +3,93 @@ package testing;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.util.Date;
-import java.util.logging.Level;
 
 import org.apache.http.client.utils.URIBuilder;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.LogType;
-import org.openqa.selenium.logging.LoggingPreferences;
-import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import org.openqa.selenium.*;
 
 
 public class UriTest {
-	
-	private static WebDriver driver;
 
-    public static void setUp() {     
-        DesiredCapabilities caps = DesiredCapabilities.chrome();
-        LoggingPreferences logPrefs = new LoggingPreferences();
-        logPrefs.enable(LogType.BROWSER, Level.ALL);
-        caps.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
-        driver = new HtmlUnitDriver(caps);
-        
-    }
+	static WebDriver driver;
+	private static JavascriptExecutor js;
+	static String pageLoadStatus = null;
 
-    
-    public void tearDown() {
-        driver.quit();
-    }
 
-    public static void analyzeLog() {
-        LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
-        for (LogEntry entry : logEntries) {
-            System.out.println(new Date(entry.getTimestamp()) + " " + entry.getLevel() + " " + entry.getMessage());
-            //do something useful with the data
-        }
-    }
-
-   
 
 	public static void main(String[] args) throws URISyntaxException, IOException {
+
+		Capabilities caps = new DesiredCapabilities();
+	    ((DesiredCapabilities) caps).setJavascriptEnabled(true);                
+	    ((DesiredCapabilities) caps).setCapability("takesScreenshot", false);  
+	    ((DesiredCapabilities) caps).setCapability(
+	            PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
+	            ".\\WebDrivers\\phantomjs.exe"
+	        );
+	     driver = new PhantomJSDriver(caps);
+	     
+	     driver.get(courseQuery("Vergelijkende studie van imperatieve"));
+		
+	     waitForPageToLoad();
+
+		waitSeconds(5);
+
+		System.out.println(driver.getPageSource());
 		
 		
-		
-		WebDriver driver = new HtmlUnitDriver();
-		
-		driver.get(courseQuery("Vergelijkende studie van imperatieve"));
-		
-		LogEntries logs = driver.manage().logs().get("browser");
-		
-		System.out.println(logs.toString());
 	}
-	
 
-private static String courseQuery(String query) throws URISyntaxException, UnsupportedEncodingException {
+	public static void waitSeconds(int secons) {
+		System.out.print("Pausing for " + secons + " seconds: ");
+		try {
+			Thread.currentThread();		
+			int x = 1;
+			while(x <= secons) {
+				Thread.sleep(1000);
+				System.out.print(" " + x );
+				x = x + 1;
+			}
+			System.out.print('\n');
+		} catch (InterruptedException ex) {
+			ex.printStackTrace();
+		}	
+	}
+
+	public static void waitForPageToLoad() {
+		do {
+			js = (JavascriptExecutor) driver;
+			pageLoadStatus = (String)js.executeScript("return document.readyState");
+			System.out.print(".");
+		} while ( !pageLoadStatus.equals("complete") );
+		System.out.println();
+		System.out.println("Page Loaded.");
+	}
+
+	private static String courseQuery(String query) throws URISyntaxException, UnsupportedEncodingException {
+
+		URIBuilder uriBuilder = new URIBuilder("https://onderwijsaanbod.kuleuven.be");
+
+		URIBuilder queryUri = new URIBuilder();
+		queryUri.addParameter("q", query)
+		.addParameter("idx", "ALL")
+		.addParameter("jaar", "2015")
+		.addParameter("isvertaling", "0");
+
+
+		uriBuilder	.setPath("/oa/find/")
+		.setFragment("/" + queryUri.toString());
+
+
+		return uriBuilder.toString().replace("+", "%20");
+	}
+
+
 	
-	URIBuilder uriBuilder = new URIBuilder("https://onderwijsaanbod.kuleuven.be");
-	
-	URIBuilder queryUri = new URIBuilder();
-	queryUri.addParameter("q", query)
-			.addParameter("idx", "ALL")
-			.addParameter("jaar", "2015")
-			.addParameter("isvertaling", "0");
-	
-	
-	uriBuilder	.setPath("/oa/find/")
-				.setFragment("/" + queryUri.toString());
-	
-	
-	return uriBuilder.toString().replace("+", "%20");
 }
 
 
-}
