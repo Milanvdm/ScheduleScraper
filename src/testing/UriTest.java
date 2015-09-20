@@ -24,7 +24,7 @@ public class UriTest {
 
 		CourseScraperImpl test = new CourseScraperImpl();
 		
-		System.out.println(test.getCourseUrl("Vergelijkende studie van imperatieve"));
+		System.out.println(test.getCourseScheduleUrl("https://onderwijsaanbod.kuleuven.be/2015/syllabi/n/H04L5AN.htm"));
 		
 		System.exit(0);
 	}

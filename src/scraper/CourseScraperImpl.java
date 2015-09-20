@@ -21,6 +21,10 @@ public class CourseScraperImpl implements CourseScraper {
 	private final static String COURSE_SEARCH_RESULTS = "div#results";
 	private final static String COURSE_SEARCH_HIT_CLASS = "search-result";
 	private final static String COURSE_SEARCH_HIT_TITLE = "title";
+	
+	private final static String COURSE_CONTENT = "div#content";
+	private final static String COURSE_DURATION_CLASS = "span.duur";
+	
 
 	public Course getCourseWithId(String id, Date date) {
 		// TODO Auto-generated method stub
@@ -32,7 +36,21 @@ public class CourseScraperImpl implements CourseScraper {
 		return null;
 	}
 	
-	public String getCourseUrl(String query) throws URISyntaxException {
+	public String getCourseScheduleUrl(String courseUrl) throws IOException {
+		
+		Document document = Jsoup.connect(courseUrl).get();
+		
+		Element courseContent = document.select(COURSE_CONTENT).first();
+		
+		Element courseDuration = courseContent.select(COURSE_DURATION_CLASS).first();
+		
+		String scheduleUrl = courseDuration.getElementsByAttribute("href").attr("href");
+		
+		return scheduleUrl;
+		
+	}
+	
+	private String getCourseUrl(String query) throws URISyntaxException {
 		String queryUrl = courseQuery(query);
 		
 		String pageSource = browser.getPageSourceAfterJS(queryUrl);
