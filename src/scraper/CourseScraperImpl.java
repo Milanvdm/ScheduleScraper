@@ -2,6 +2,8 @@ package scraper;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -43,10 +46,33 @@ public class CourseScraperImpl implements CourseScraper {
 		return null;
 	}
 	
-	private List<CourseMoment> getCourseMoments(String courseHtml, Date day) {
-		return null;
+	private List<CourseMoment> getCourseMoments(String courseHtml, Date day) throws ParseException {
+		List<CourseMoment> courseMoments = new ArrayList<CourseMoment>();
 		
+		Document document = Jsoup.parse(courseHtml);
+		
+		Elements dayElements = document.getElementsByAttributeValue("align", "middle");
+		
+		for(Element dayElement: dayElements) {
+			Element toCheck = dayElement.getElementsByClass("menu").first();
+			String possibleDate = toCheck.text();
+			Date date = Parser.parseDate(possibleDate);
+			
+			if(date.equals(day)) {
+				Elements hourElements = toCheck.getElementsByClass("event");
+				
+				for(Element hourElement: hourElements) {
+					String info = hourElement.attr("onmouseover");
+					CourseMoment courseMoment = Parser.parseCourseMoment(info);
+					
+					courseMoments.add(courseMoment);
+				}
+			}
+		}
+		
+		return courseMoments;
 	}
+	
 	
 	private String getCourseHtmlAtWeek(String courseUrl, Date weekDate) throws IOException {
 		String courseScheduleUrl = getCourseScheduleUrl(courseUrl);

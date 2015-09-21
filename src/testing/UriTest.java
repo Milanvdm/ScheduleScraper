@@ -3,6 +3,8 @@ package testing;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.http.client.utils.URIBuilder;
@@ -21,7 +23,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.*;
 
 import scraper.CourseScraperImpl;
-import scraper.DocumentSettleCondition;
 import util.BrowserImpl;
 import util.Parser;
 import util.Util;
@@ -32,26 +33,12 @@ public class UriTest {
 
 
 
-	public static void main(String[] args) throws URISyntaxException, IOException {
+	public static void main(String[] args) throws URISyntaxException, IOException, ParseException {
 
-		BrowserImpl browser = new BrowserImpl();
+		Date date = Parser.parseDate("Donderdag<BR>24.09.2015<BR>");
+
 		
-		browser.getUrl("http://www.kuleuven.be/sapredir/uurrooster/pre_laden.htm?OBJID=50448413&OTYPE=SM&TAAL=N&SEL_JAAR=2015");
-		
-		Boolean check = false;
-		
-		while(check == false) {
-			check = (new WebDriverWait(browser.getDriver(), 10))
-					   .until(ExpectedConditions.invisibilityOfElementLocated(By.name("ladenform")));
-		}
-		
-		System.out.println(browser.getPageSource());
-		
-		browser.executeJavascript("wijzigdatum('26.10.2015')");
-		
-		browser.waitForPageToLoad();
-		
-		System.out.println(browser.getPageSource());
+		System.out.println(date.toString());
 		
 		System.exit(0);
 	}
