@@ -3,13 +3,18 @@ package scraper;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import schedule.Course;
+import schedule.CourseMoment;
 import util.Browser;
 import util.BrowserImpl;
 import util.Parser;
@@ -25,15 +30,32 @@ public class CourseScraperImpl implements CourseScraper {
 	private final static String COURSE_CONTENT = "div#content";
 	private final static String COURSE_DURATION_CLASS = "span.duur";
 	
+	private final static String COURSE_SCHEDULE_REDIRECTION_NAME = "ladenform";
+	
 
 	public Course getCourseWithId(String id, Date date) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Course getCourseWithName(String name, Date date) {
+	public Course getCourseWithName(String name, Date weekDate) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private List<CourseMoment> getCourseMoments(String courseHtml, Date day) {
+		return null;
+		
+	}
+	
+	private String getCourseHtmlAtWeek(String courseUrl, Date weekDate) throws IOException {
+		String courseScheduleUrl = getCourseScheduleUrl(courseUrl);
+		
+		ExpectedCondition<Boolean> condition = ExpectedConditions.invisibilityOfElementLocated(By.name(COURSE_SCHEDULE_REDIRECTION_NAME));
+		
+		browser.waitForRedirection(courseScheduleUrl, condition);
+	
+		return browser.getPageSource();
 	}
 	
 	private String getCourseScheduleUrl(String courseUrl) throws IOException {
