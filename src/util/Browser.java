@@ -1,55 +1,17 @@
 package util;
 
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriverService;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
-public class Browser {
-
-	private WebDriver driver;
-	private JavascriptExecutor js;
-	private String pageLoadStatus = null;
-
-	public Browser() {
-
-		Capabilities caps = new DesiredCapabilities();
-	    ((DesiredCapabilities) caps).setJavascriptEnabled(true);                
-	    ((DesiredCapabilities) caps).setCapability("takesScreenshot", false);  
-	    ((DesiredCapabilities) caps).setCapability(
-	            PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
-	            ".\\WebDrivers\\phantomjs.exe"
-	        );
-	     
-	    driver = new PhantomJSDriver(caps);
-	}
+public interface Browser {
 	
-	public String getPageSourceAfterJS(String url) {
-		driver.get(url);
-		
-	     waitForPageToLoad();
-	     
-	     Util.waitSeconds(1);
+	public abstract void waitForRedirection(String url, ExpectedCondition<Boolean> condition);
+	
+	public abstract String getPageSource();
+	
+	public abstract void waitForJS(String url);
+	
+	public abstract Object executeJavascript(String code);
+	
+	public abstract void closeBrowser();
 
-		return driver.getPageSource();
-	}
-	
-	
-	public void closeBrowser() {
-		driver.close();
-	}
-
-	
-	private void waitForPageToLoad() {
-		
-		do {
-			js = (JavascriptExecutor) driver;
-			pageLoadStatus = (String)js.executeScript("return document.readyState");
-		} while ( !pageLoadStatus.equals("complete") );
-	}
-
-	
-	
 }

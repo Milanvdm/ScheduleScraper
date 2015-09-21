@@ -8,15 +8,15 @@ import org.apache.http.client.utils.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import schedule.Course;
 import util.Browser;
-import util.Util;
+import util.BrowserImpl;
+import util.Parser;
 
 public class CourseScraperImpl implements CourseScraper {
 	
-	public Browser browser = new Browser();
+	public Browser browser = new BrowserImpl();
 	
 	private final static String COURSE_SEARCH_RESULTS = "div#results";
 	private final static String COURSE_SEARCH_HIT_CLASS = "search-result";
@@ -36,7 +36,7 @@ public class CourseScraperImpl implements CourseScraper {
 		return null;
 	}
 	
-	public String getCourseScheduleUrl(String courseUrl) throws IOException {
+	private String getCourseScheduleUrl(String courseUrl) throws IOException {
 		
 		Document document = Jsoup.connect(courseUrl).get();
 		
@@ -44,7 +44,9 @@ public class CourseScraperImpl implements CourseScraper {
 		
 		Element courseDuration = courseContent.select(COURSE_DURATION_CLASS).first();
 		
-		String scheduleUrl = courseDuration.getElementsByAttribute("href").attr("href");
+		String scheduleUrlWithJs = courseDuration.getElementsByAttribute("href").attr("href");
+		
+		String scheduleUrl = Parser.getScheduleUrl(scheduleUrlWithJs);
 		
 		return scheduleUrl;
 		
@@ -53,7 +55,9 @@ public class CourseScraperImpl implements CourseScraper {
 	private String getCourseUrl(String query) throws URISyntaxException {
 		String queryUrl = courseQuery(query);
 		
-		String pageSource = browser.getPageSourceAfterJS(queryUrl);
+		browser.waitForJS(queryUrl);
+		
+		String pageSource = browser.getPageSource();
 		
 		Document document = Jsoup.parse(pageSource);
 		
