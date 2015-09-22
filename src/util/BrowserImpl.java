@@ -34,7 +34,7 @@ public class BrowserImpl implements Browser {
 		Boolean check = false;
 		
 		while(check == false) {
-			check = (new WebDriverWait(driver, 10))
+			check = (new WebDriverWait(driver, 15))
 					   .until(condition);
 		}
 	}
@@ -52,7 +52,7 @@ public class BrowserImpl implements Browser {
 
 		waitForPageToLoad();
 
-		Util.waitSeconds(1);
+		Util.waitSeconds(3);
 	}
 
 

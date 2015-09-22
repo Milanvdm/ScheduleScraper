@@ -27,5 +27,10 @@ public class CourseMoment {
 		return endTime;
 	}
 	
+	@Override
+	public String toString() {
+		return location + " - " + startTime.toString() + " to " + endTime.toString();
+	}
+	
 
 }

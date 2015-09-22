@@ -3,7 +3,9 @@ package scraper;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -41,9 +43,35 @@ public class CourseScraperImpl implements CourseScraper {
 		return null;
 	}
 
-	public Course getCourseWithName(String name, Date weekDate) {
-		// TODO Auto-generated method stub
-		return null;
+	public Course getCourseWithName(String name, Date weekDate) throws URISyntaxException, IOException, ParseException {
+		String courseUrl = getCourseUrl(name);
+		
+		Course course = new Course(name, courseUrl);
+		
+		String weekHtml = getCourseHtmlAtWeek(courseUrl, weekDate);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(weekDate);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		Date startDate = cal.getTime();
+		cal.add(Calendar.DAY_OF_WEEK, 6);
+		Date endDate = cal.getTime();  
+		
+		Calendar start = Calendar.getInstance();
+		start.setTime(startDate);
+		Calendar end = Calendar.getInstance();
+		end.setTime(endDate);
+
+		List<CourseMoment> courseMoments = new ArrayList<CourseMoment>();
+		
+		for (Date day = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), day = start.getTime()) {
+			courseMoments.addAll(getCourseMoments(weekHtml, day));
+		}
+		
+		course.setCourseMoments(courseMoments);
+		
+		return course;
+		
 	}
 	
 	private List<CourseMoment> getCourseMoments(String courseHtml, Date day) throws ParseException {
@@ -54,19 +82,29 @@ public class CourseScraperImpl implements CourseScraper {
 		Elements dayElements = document.getElementsByAttributeValue("align", "middle");
 		
 		for(Element dayElement: dayElements) {
+			
 			Element toCheck = dayElement.getElementsByClass("menu").first();
+			
+			if(toCheck == null) {
+				continue;
+			}
+			
 			String possibleDate = toCheck.text();
 			Date date = Parser.parseDate(possibleDate);
 			
-			if(date.equals(day)) {
-				Elements hourElements = toCheck.getElementsByClass("event");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			if(sdf.format(date).equals(sdf.format(day))) {
+				Elements hourElements = dayElement.getElementsByClass("event");
 				
 				for(Element hourElement: hourElements) {
+					
 					String info = hourElement.attr("onmouseover");
 					CourseMoment courseMoment = Parser.parseCourseMoment(info);
 					
 					courseMoments.add(courseMoment);
 				}
+				
+				return courseMoments;
 			}
 		}
 		
@@ -101,7 +139,7 @@ public class CourseScraperImpl implements CourseScraper {
 	}
 	
 	private String getCourseUrl(String query) throws URISyntaxException {
-		String queryUrl = courseQuery(query);
+		String queryUrl = courseQueryUrl(query);
 		
 		browser.waitForJS(queryUrl);
 		
@@ -117,7 +155,7 @@ public class CourseScraperImpl implements CourseScraper {
 		return url;
 	}
 	
-	private String courseQuery(String query) throws URISyntaxException {
+	private String courseQueryUrl(String query) throws URISyntaxException {
 		URIBuilder uriBuilder = new URIBuilder("https://onderwijsaanbod.kuleuven.be");
 		
 		URIBuilder queryUri = new URIBuilder();

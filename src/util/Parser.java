@@ -3,9 +3,14 @@ package util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import schedule.CourseMoment;
 
@@ -46,24 +51,58 @@ public class Parser {
 		
 		
 	}
-
-	public static CourseMoment parseCourseMoment(String info) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public static List<Date> parseTime(String possibleTimes) throws ParseException {
+		
+		List<Date> toReturn = new ArrayList<Date>();
+		
+		String regex = "([01]?[0-9]|2[0-3]):[0-5][0-9]";
+		
+		Pattern pattern = Pattern.compile(regex);
+	    Matcher matcher = pattern.matcher(possibleTimes);
+	    
+	    DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+	    
+	    String foundTimeString = null;
+	    while (matcher.find()) {
+	    	foundTimeString = matcher.group(0);
+	    	
+	    	Date result = dateFormat.parse(foundTimeString);
+	    	
+	    	toReturn.add(result);
+	    } 
+		
+		return toReturn;
 	}
 
-	
-	/*
-	 "return overlib('<img src=icons/teacher.gif border=0><a href= javascript:webadres
-	 (\'http://www.kuleuven.be/wieiswie/nl/person/00018905\')>Prof. dr. ir. Piessens Frank 
-	 </a><BR><img src=icons/syllabus.gif border=0><a href= javascript:webadres(\'http://www.kul
-	 euven.be/onderwijs/aanbod/syllabi/H04L5AN.htm\')>H04L5a</a><br><img src=icons/building.gif 
-	 border=0><a href=javascript:gebouw(\'50721558\',\'X\')>200A - lokaal 00.225 ( AUDITORIUM 
-	 COMPUTERWETENSCHAPPEN )</a><br><I>Om de links te bezoeken, eerst 1 maal klikken om dit 
-	 venster vast te zetten</I>', CAPTION, '<I> Vergelijkende studie van imperatieve 
-	 programmeertalen: hoorcollege </I><BR><hr size=1 color=white>16:00 tot 18:30');"
+	public static CourseMoment parseCourseMoment(String info) throws ParseException {
+		String html = info.replace("return overlib('", "").replace("');", "");
+		
+		Document document = Jsoup.parse(html);
+		
+		String building = document.getElementsByAttributeValue("src", "icons/building.gif").first().nextElementSibling().text();
+		
+		String possibleTimes = document.getElementsByAttributeValue("color", "white").first().nextSibling().toString();
+		
+		List<Date> times = parseTime(possibleTimes);
+		
+		
+		Date startTime;
+		Date endTime;
+		if(times.get(0).after(times.get(1))) {
+			startTime = times.get(1);
+			endTime = times.get(0);
+		}
+		else {
+			startTime = times.get(0);
+			endTime = times.get(1);
+		}
+		
+		CourseMoment courseMoment = new CourseMoment(building, startTime, endTime);
+		
+		return courseMoment;
+	}
 
-	 */
 	
 
 }
