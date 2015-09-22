@@ -1,10 +1,11 @@
 package util;
 
-import org.openqa.selenium.support.ui.ExpectedCondition;
+import java.io.IOException;
+
 
 public interface Browser {
 	
-	public abstract void waitForRedirection(String url, ExpectedCondition<Boolean> condition);
+	public abstract void waitForRedirection(String url) throws InterruptedException, IOException;
 	
 	public abstract String getPageSource();
 	

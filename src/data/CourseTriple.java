@@ -9,6 +9,16 @@ public class CourseTriple implements Serializable {
 	private String url = null;
 	private String linkedCourse = null;
 	
+	private boolean isLinked = false;
+	
+	public void setLinked(boolean state) {
+		isLinked = state;
+	}
+	
+	public boolean isLinked() {
+		return isLinked;
+	}
+	
 	public CourseTriple(String name) {
 		this.name = name;
 	}

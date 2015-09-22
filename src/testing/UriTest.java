@@ -20,19 +20,24 @@ public class UriTest {
 
 
 
-	public static void main(String[] args) throws URISyntaxException, IOException, ParseException, ClassNotFoundException {
+	public static void main(String[] args) throws URISyntaxException, IOException, ParseException, ClassNotFoundException, InterruptedException {
 
 		Schedule schedule = new Schedule();
 		
-		System.out.println(schedule.getScheduleDate().toString());
+		//schedule.addCourse("Vergelijkende studie van imperatieve programmeertalen");
 		
-		schedule.nextWeek();
+		//schedule.removeCourse("Vergelijkende studie van imperatieve programmeertalen");
+		//schedule.removeCourse("Comparative Programming Languages");
 		
-		System.out.println(schedule.getScheduleDate().toString());
+		schedule.addCourse("Comparative Programming Languages");
 		
-		schedule.previousWeek();
+		System.out.println(schedule.getAllCourseNames());
 		
-		System.out.println(schedule.getScheduleDate().toString());
+		//schedule.linkCourses("Vergelijkende studie van imperatieve programmeertalen", "Comparative Programming Languages");
+		
+		schedule.getCourses();
+		
+		System.out.println(schedule.printSchedule());
 		
 		System.exit(0);
 	}

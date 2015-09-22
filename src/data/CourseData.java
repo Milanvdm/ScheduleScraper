@@ -13,6 +13,10 @@ public class CourseData implements Serializable {
 		data.add(triple);
 	}
 	
+	public void removeData(CourseTriple triple) {
+		data.remove(triple);
+	}
+	
 	public List<String> getAllCourses() {
 		List<String> toReturn = new ArrayList<String>();
 		

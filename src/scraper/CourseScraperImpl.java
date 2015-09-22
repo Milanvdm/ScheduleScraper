@@ -14,11 +14,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import schedule.Course;
 import schedule.CourseMoment;
 import util.Browser;
 import util.BrowserImpl;
@@ -35,18 +31,8 @@ public class CourseScraperImpl implements CourseScraper {
 	private final static String COURSE_CONTENT = "div#content";
 	private final static String COURSE_DURATION_CLASS = "span.duur";
 	
-	private final static String COURSE_SCHEDULE_REDIRECTION_NAME = "ladenform";
-	
 
-	public Course getCourseWithId(String id, Date date) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Course getCourseWithName(String name, Date weekDate) throws URISyntaxException, IOException, ParseException {
-		String courseUrl = getCourseUrl(name);
-		
-		Course course = new Course(name, courseUrl);
+	public List<CourseMoment> getCourseMoments(String courseUrl, Date weekDate) throws URISyntaxException, IOException, ParseException, InterruptedException {
 		
 		String weekHtml = getCourseHtmlAtWeek(courseUrl, weekDate);
 		
@@ -65,16 +51,14 @@ public class CourseScraperImpl implements CourseScraper {
 		List<CourseMoment> courseMoments = new ArrayList<CourseMoment>();
 		
 		for (Date day = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), day = start.getTime()) {
-			courseMoments.addAll(getCourseMoments(weekHtml, day));
+			courseMoments.addAll(getCourseMomentsForDay(weekHtml, day));
 		}
 		
-		course.setCourseMoments(courseMoments);
-		
-		return course;
+		return courseMoments;
 		
 	}
 	
-	private List<CourseMoment> getCourseMoments(String courseHtml, Date day) throws ParseException {
+	private List<CourseMoment> getCourseMomentsForDay(String courseHtml, Date day) throws ParseException {
 		List<CourseMoment> courseMoments = new ArrayList<CourseMoment>();
 		
 		Document document = Jsoup.parse(courseHtml);
@@ -113,13 +97,11 @@ public class CourseScraperImpl implements CourseScraper {
 	}
 	
 	
-	private String getCourseHtmlAtWeek(String courseUrl, Date weekDate) throws IOException {
+	private String getCourseHtmlAtWeek(String courseUrl, Date weekDate) throws IOException, InterruptedException {
 		String courseScheduleUrl = getCourseScheduleUrl(courseUrl);
 		
-		ExpectedCondition<Boolean> condition = ExpectedConditions.invisibilityOfElementLocated(By.name(COURSE_SCHEDULE_REDIRECTION_NAME));
+		browser.waitForRedirection(courseScheduleUrl);
 		
-		browser.waitForRedirection(courseScheduleUrl, condition);
-	
 		return browser.getPageSource();
 	}
 	

@@ -1,5 +1,10 @@
 package util;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +21,17 @@ import schedule.CourseMoment;
 
 public class Parser {
 
+	public static String getFirstLine(String input) throws IOException {
+		InputStream is = new ByteArrayInputStream(input.getBytes());
+
+		// read it with BufferedReader
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+	    
+		String firstLine = br.readLine();
+		
+		return firstLine;
+	}
+
 	public static String getScheduleUrl(String urlWithJs) {
 		String link = null;
 
@@ -24,7 +40,7 @@ public class Parser {
 		Matcher m = p.matcher(urlWithJs);
 		if(m.find()) {
 			String urlStr = m.group();
-			
+
 			if (urlStr.startsWith("(") && urlStr.endsWith(")")) {
 				urlStr = urlStr.substring(1, urlStr.length() - 1);
 			}
@@ -35,58 +51,58 @@ public class Parser {
 
 	public static Date parseDate(String possibleDate) throws ParseException {
 		String regex = "[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}";
-		
+
 		Pattern pattern = Pattern.compile(regex);
-	    Matcher matcher = pattern.matcher(possibleDate);
-	    
-	    String foundDateString = null;
-	    while (matcher.find()) {
-	    	foundDateString = matcher.group(0);
-	    }
-		
+		Matcher matcher = pattern.matcher(possibleDate);
+
+		String foundDateString = null;
+		while (matcher.find()) {
+			foundDateString = matcher.group(0);
+		}
+
 		DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		Date result = dateFormat.parse(foundDateString);  
-		
+
 		return result;
-		
-		
+
+
 	}
-	
+
 	public static List<Date> parseTime(String possibleTimes) throws ParseException {
-		
+
 		List<Date> toReturn = new ArrayList<Date>();
-		
+
 		String regex = "([01]?[0-9]|2[0-3]):[0-5][0-9]";
-		
+
 		Pattern pattern = Pattern.compile(regex);
-	    Matcher matcher = pattern.matcher(possibleTimes);
-	    
-	    DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-	    
-	    String foundTimeString = null;
-	    while (matcher.find()) {
-	    	foundTimeString = matcher.group(0);
-	    	
-	    	Date result = dateFormat.parse(foundTimeString);
-	    	
-	    	toReturn.add(result);
-	    } 
-		
+		Matcher matcher = pattern.matcher(possibleTimes);
+
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+
+		String foundTimeString = null;
+		while (matcher.find()) {
+			foundTimeString = matcher.group(0);
+
+			Date result = dateFormat.parse(foundTimeString);
+
+			toReturn.add(result);
+		} 
+
 		return toReturn;
 	}
 
 	public static CourseMoment parseCourseMoment(String info) throws ParseException {
 		String html = info.replace("return overlib('", "").replace("');", "");
-		
+
 		Document document = Jsoup.parse(html);
-		
+
 		String building = document.getElementsByAttributeValue("src", "icons/building.gif").first().nextElementSibling().text();
-		
+
 		String possibleTimes = document.getElementsByAttributeValue("color", "white").first().nextSibling().toString();
-		
+
 		List<Date> times = parseTime(possibleTimes);
-		
-		
+
+
 		Date startTime;
 		Date endTime;
 		if(times.get(0).after(times.get(1))) {
@@ -97,12 +113,12 @@ public class Parser {
 			startTime = times.get(0);
 			endTime = times.get(1);
 		}
-		
+
 		CourseMoment courseMoment = new CourseMoment(building, startTime, endTime);
-		
+
 		return courseMoment;
 	}
 
-	
+
 
 }

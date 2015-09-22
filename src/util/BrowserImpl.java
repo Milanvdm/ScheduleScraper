@@ -1,19 +1,21 @@
 package util;
 
+import java.io.IOException;
+
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 public class BrowserImpl implements Browser {
 
 	private WebDriver driver;
 	private JavascriptExecutor js;
 	private String pageLoadStatus = null;
+	
+	private final static String REDIRECTION_STRING
+				= "<!-- LADEN VAN DE TOEPASSING MIJN UURROOSTERS    -->";
 
 	public BrowserImpl() {
 
@@ -28,14 +30,11 @@ public class BrowserImpl implements Browser {
 		driver = new PhantomJSDriver(caps);
 	}
 	
-	public void waitForRedirection(String url, ExpectedCondition<Boolean> condition) {
+	public void waitForRedirection(String url) throws InterruptedException, IOException {
 		getUrl(url);
 		
-		Boolean check = false;
-		
-		while(check == false) {
-			check = (new WebDriverWait(driver, 15))
-					   .until(condition);
+		while(Parser.getFirstLine(driver.getPageSource()).contains(REDIRECTION_STRING) || driver.getPageSource().length() < 15000) {
+			Thread.sleep(500);
 		}
 	}
 	

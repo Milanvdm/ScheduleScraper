@@ -9,7 +9,7 @@ public class Course {
 	private String name;
 	private String url;
 
-	private List<CourseMoment> courseMoments;
+	private List<CourseMoment> courseMoments = new ArrayList<CourseMoment>();;
 	
 	public Course(String name, String url) {
 		this.name = name;
@@ -38,8 +38,8 @@ public class Course {
 		return courseMoments;
 	}
 
-	public void setCourseMoments(List<CourseMoment> courseMoments) {
-		this.courseMoments = courseMoments;
+	public void addCourseMoments(List<CourseMoment> courseMoments) {
+		this.courseMoments.addAll(courseMoments);
 	}
 
 	public String getUrl() {

@@ -1,5 +1,6 @@
 package schedule;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CourseMoment implements Comparable<CourseMoment> {
@@ -30,7 +31,9 @@ public class CourseMoment implements Comparable<CourseMoment> {
 	
 	@Override
 	public String toString() {
-		return location + " - " + startTime.toString() + " to " + endTime.toString();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		
+		return location + " - " + sdf.format(startTime) + " tot " + sdf.format(endTime);
 	}
 
 	public Date getDate() {
