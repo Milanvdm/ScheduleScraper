@@ -100,6 +100,7 @@ public class CourseScraperImpl implements CourseScraper {
 					
 					String info = hourElement.attr("onmouseover");
 					CourseMoment courseMoment = Parser.parseCourseMoment(info);
+					courseMoment.setDate(day);
 					
 					courseMoments.add(courseMoment);
 				}
@@ -138,7 +139,7 @@ public class CourseScraperImpl implements CourseScraper {
 		
 	}
 	
-	private String getCourseUrl(String query) throws URISyntaxException {
+	public String getCourseUrl(String query) throws URISyntaxException {
 		String queryUrl = courseQueryUrl(query);
 		
 		browser.waitForJS(queryUrl);

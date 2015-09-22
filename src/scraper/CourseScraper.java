@@ -13,4 +13,6 @@ public interface CourseScraper {
 	
 	public abstract Course getCourseWithName(String name, Date date) throws URISyntaxException, IOException, ParseException;
 
+	public abstract String getCourseUrl(String courseName) throws URISyntaxException;
+
 }

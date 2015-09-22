@@ -6,10 +6,21 @@ import java.util.List;
 
 public class CourseData implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private List<CourseTriple> data = new ArrayList<CourseTriple>();
 	
 	public void addData(CourseTriple triple) {
 		data.add(triple);
+	}
+	
+	public List<String> getAllCourses() {
+		List<String> toReturn = new ArrayList<String>();
+		
+		for(CourseTriple toCheck: data) {
+			toReturn.add(toCheck.getName());
+		}
+		
+		return toReturn;
 	}
 	
 	public CourseTriple getCourseTriple(String courseName) {
@@ -51,5 +62,7 @@ public class CourseData implements Serializable {
 		}
 		return false;
 	}
+	
+	
 
 }

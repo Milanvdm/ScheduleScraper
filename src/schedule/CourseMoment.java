@@ -2,9 +2,10 @@ package schedule;
 
 import java.util.Date;
 
-public class CourseMoment {
+public class CourseMoment implements Comparable<CourseMoment> {
 	
 	private String location;
+	private Date date;
 	private Date startTime;
 	private Date endTime;
 	
@@ -30,6 +31,26 @@ public class CourseMoment {
 	@Override
 	public String toString() {
 		return location + " - " + startTime.toString() + " to " + endTime.toString();
+	}
+
+	public Date getDate() {
+		return this.date;
+	}
+
+	public void setDate(Date day) {
+		this.date = day;
+	}
+
+
+
+	public int compareTo(CourseMoment moment2) {
+		if(this.getStartTime().before(moment2.getDate())){
+            return -1;
+        }
+        if(this.getStartTime().after(moment2.getDate())){
+            return 1;
+        }
+        return 0;
 	}
 	
 

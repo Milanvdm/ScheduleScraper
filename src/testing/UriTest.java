@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import schedule.Course;
+import schedule.Schedule;
 import scraper.CourseScraper;
 import scraper.CourseScraperImpl;
 
@@ -19,13 +20,19 @@ public class UriTest {
 
 
 
-	public static void main(String[] args) throws URISyntaxException, IOException, ParseException {
+	public static void main(String[] args) throws URISyntaxException, IOException, ParseException, ClassNotFoundException {
 
-		CourseScraper scraper = new CourseScraperImpl();
+		Schedule schedule = new Schedule();
 		
-		Course course = scraper.getCourseWithName("Vergelijkende studie van imperatieve programmeertalen", new Date());
+		System.out.println(schedule.getScheduleDate().toString());
 		
-		System.out.println(course.toString());
+		schedule.nextWeek();
+		
+		System.out.println(schedule.getScheduleDate().toString());
+		
+		schedule.previousWeek();
+		
+		System.out.println(schedule.getScheduleDate().toString());
 		
 		System.exit(0);
 	}
