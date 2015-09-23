@@ -9,10 +9,18 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.jaunt.MultipleFound;
+import com.jaunt.NotFound;
+import com.jaunt.ResponseException;
+import com.jaunt.SearchException;
+
 import schedule.Course;
 import schedule.Schedule;
 import scraper.CourseScraper;
 import scraper.CourseScraperImpl;
+import util.Browser;
+import util.BrowserImpl;
 
 
 public class UriTest {
@@ -20,24 +28,13 @@ public class UriTest {
 
 
 
-	public static void main(String[] args) throws URISyntaxException, IOException, ParseException, ClassNotFoundException, InterruptedException {
+	public static void main(String[] args) throws URISyntaxException, IOException, ParseException, ClassNotFoundException, InterruptedException, NotFound, MultipleFound, FailingHttpStatusCodeException, ResponseException, SearchException {
 
-		Schedule schedule = new Schedule();
+		Browser browser = new BrowserImpl();
 		
-		//schedule.addCourse("Vergelijkende studie van imperatieve programmeertalen");
+		String html = browser.getScheduleHtml("https://webwsp.aps.kuleuven.be/sap(bD1lbiZjPTIwMA==)/public/bsp/sap/z_mijnuurrstrs/uurrooster_sem_lijst.htm", "51230411", "1 ");
 		
-		//schedule.removeCourse("Vergelijkende studie van imperatieve programmeertalen");
-		//schedule.removeCourse("Comparative Programming Languages");
-		
-		schedule.addCourse("Comparative Programming Languages");
-		
-		System.out.println(schedule.getAllCourseNames());
-		
-		//schedule.linkCourses("Vergelijkende studie van imperatieve programmeertalen", "Comparative Programming Languages");
-		
-		schedule.getCourses();
-		
-		System.out.println(schedule.printSchedule());
+		System.out.println(html);
 		
 		System.exit(0);
 	}
