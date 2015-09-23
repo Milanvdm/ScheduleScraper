@@ -16,16 +16,14 @@ import schedule.Schedule;
 public class Cli {
 	private Schedule schedule;
 	
-	private String[] args = null;
 	private Options options = new Options();
 
-	public Cli(String[] args) throws ClassNotFoundException, IOException {
+	public Cli() throws ClassNotFoundException, IOException {
 		
 		schedule = new Schedule(); //Dont start browser when schedule is made.
 
-		this.args = args;
-
 		options.addOption("h", "help", false, "show help.");
+		options.addOption("e", "help", false, "exit.");
 		
 		options.addOption("nw", "nextWeek", false, "go to next week.");
 		options.addOption("pw", "prevWeek", false, "go to previous week.");
@@ -33,35 +31,46 @@ public class Cli {
 		options.addOption("ps", "printSchedule", false, "print schedule for current week.");
 		options.addOption("pc", "printCourses", false, "print an overview of your added courses.");
 		
-		options.addOption("ac", "addCourse", true, "add a course. @param1: courseName");
-		options.addOption("rc", "removeCourse", true, "remove a course. @param1: courseName");
+		options.addOption("ac", "addCourse", true, "add a course.");
+		options.addOption("rc", "removeCourse", true, "remove a course.");
 		
-		Option linkOption = new Option("lc", "linkCourse", true, "link a course to another one. @param1: linkedTo, @param2: toBeLinked");
+		Option linkOption = new Option("lc", "linkCourse", true, "link a course to another one.");
 		linkOption.setArgs(2);
 		options.addOption(linkOption);
 		
-		Option unlinkOption = new Option("uc", "unlinkCourse", true, "unlink a course from another one. @param1: unlinkedFrom, @param2: toBeUnlinked");
+		Option unlinkOption = new Option("uc", "unlinkCourse", true, "unlink a course from another one.");
 		unlinkOption.setArgs(2);
 		options.addOption(unlinkOption);
+		
+		System.out.println("Current week is: " + schedule.printCurrentWeek());
+		help();
 
 	}
+	
 
-	public void parse() throws IOException, URISyntaxException, java.text.ParseException, InterruptedException {
+	public void parse(String[] args) throws IOException, URISyntaxException, java.text.ParseException, InterruptedException {
 		CommandLineParser parser = new DefaultParser();
 
 		CommandLine cmd = null;
 		try {
 			cmd = parser.parse(options, args);
 
-			if (cmd.hasOption("h"))
+			if (cmd.hasOption("h")) {
 				help();
+			}
+			
+			if (cmd.hasOption("e")) {
+				System.exit(0);
+			}
 
 			if (cmd.hasOption("nw")) {
 				schedule.nextWeek();
+				System.out.println("Current week is: " + schedule.printCurrentWeek());
 			}
 			
 			if (cmd.hasOption("pw")) {
 				schedule.previousWeek();
+				System.out.println("Current week is: " + schedule.printCurrentWeek());
 			}
 			
 			if (cmd.hasOption("ps")) {
@@ -113,7 +122,5 @@ public class Cli {
 		HelpFormatter formater = new HelpFormatter();
 
 		formater.printHelp("Main", options);
-		
-		System.exit(0);
 	}
 }

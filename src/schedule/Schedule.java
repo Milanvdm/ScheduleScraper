@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -47,9 +48,9 @@ public class Schedule {
 
 	public void getCourses() throws URISyntaxException, IOException, ParseException, InterruptedException {
 		scraper = new CourseScraperImpl();
-		
+
 		courses = new ArrayList<Course>();
-		
+
 		checkUrls();
 
 		for(String courseName: data.getAllCourses()) {
@@ -80,14 +81,14 @@ public class Schedule {
 		}
 
 		System.out.println("Got info from all courses.");
-		
+
 		scraper.close();
 	}
 
 	public Date getScheduleDate() {
 		return scheduleDate;
 	}
-	
+
 	public void removeAllData() throws IOException {
 		data.removeAllData();
 		saveData();
@@ -136,7 +137,7 @@ public class Schedule {
 
 	public void checkUrls() throws URISyntaxException, IOException {
 		scraper = new CourseScraperImpl();
-		
+
 		for(String courseName: data.getAllCourses()) {
 			if(!data.containsUrl(courseName)) {
 				String courseUrl = scraper.getCourseUrl(courseName);
@@ -148,7 +149,7 @@ public class Schedule {
 		saveData();
 
 		System.out.println("Checked urls.");
-		
+
 		scraper.close();
 	}
 
@@ -217,7 +218,7 @@ public class Schedule {
 
 
 		}
-		
+
 		sb.append("===END===");
 
 		return sb.toString();
@@ -314,13 +315,28 @@ public class Schedule {
 				sb.append("\n");
 			}
 		}
-		
+
 		sb.append("===END===");
 
 		return sb.toString();
 	}
 
 
+	public String printCurrentWeek() {
+		Date date = getScheduleDate();
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		Date startDate = cal.getTime();
+		cal.add(Calendar.DAY_OF_WEEK, 6);
+		Date endDate = cal.getTime();
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+		String toShow = sdf.format(startDate) + " - " + sdf.format(endDate);
+
+		return toShow;
+	}
 
 
 
