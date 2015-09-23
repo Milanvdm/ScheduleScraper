@@ -22,7 +22,7 @@ import data.CourseTriple;
 public class Schedule {
 
 	private CourseData data = null;;
-	private CourseScraper scraper;
+	private CourseScraper scraper = new CourseScraperImpl();
 
 	private List<Course> courses = new ArrayList<Course>();
 
@@ -47,7 +47,6 @@ public class Schedule {
 	}
 
 	public void getCourses() throws URISyntaxException, IOException, ParseException, InterruptedException {
-		scraper = new CourseScraperImpl();
 
 		courses = new ArrayList<Course>();
 
@@ -82,7 +81,6 @@ public class Schedule {
 
 		System.out.println("Got info from all courses.");
 
-		scraper.close();
 	}
 
 	public Date getScheduleDate() {
@@ -136,7 +134,6 @@ public class Schedule {
 	}
 
 	public void checkUrls() throws URISyntaxException, IOException {
-		scraper = new CourseScraperImpl();
 
 		for(String courseName: data.getAllCourses()) {
 			if(!data.containsUrl(courseName)) {
@@ -150,7 +147,6 @@ public class Schedule {
 
 		System.out.println("Checked urls.");
 
-		scraper.close();
 	}
 
 	public void linkCourses(String courseName, String toBeLinked) throws IOException {
@@ -219,6 +215,7 @@ public class Schedule {
 
 		}
 
+		sb.append("\n");
 		sb.append("===END===");
 
 		return sb.toString();
@@ -316,6 +313,7 @@ public class Schedule {
 			}
 		}
 
+		sb.append("\n");
 		sb.append("===END===");
 
 		return sb.toString();
