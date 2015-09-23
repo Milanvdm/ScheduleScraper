@@ -154,5 +154,9 @@ public class CourseScraperImpl implements CourseScraper {
 		
 		return uriBuilder.toString().replace("+", "%20");
 	}
+	
+	public void close() {
+		browser.closeBrowser();
+	}
 
 }

@@ -14,4 +14,6 @@ public interface CourseScraper {
 
 	public abstract String getCourseUrl(String courseName) throws URISyntaxException;
 
+	public abstract void close();
+
 }
