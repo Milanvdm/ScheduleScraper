@@ -7,66 +7,66 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
-public class ToolBar extends JPanel {
-	
+public class ToolBar extends JPanel implements ActionListener {
+
 	private JButton prev;
 	private JButton next;
-	
-	private JTextField dateField;
-	
+
+	private DateField dateField;
+
+	private TextPanel textPanel;
+
 	public ToolBar() {
-		dateField = new JTextField();
 		next = new JButton("Next");
 		prev = new JButton("Prev");
-		
-		next.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				textPanel.setText("Loading...");
-				
-				getSchedule().nextWeek();
-			
-				try {
-					getSchedule().getCourses();
-				} catch (Exception exception) {
-					textPanel.setText(exception.getMessage());
-				}
-				
-				String toPrint = getSchedule().printSchedule();
-				
-				textPanel.setText(toPrint);
-				
-			}
-		});
-		
-		
-		prev.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				textPanel.setText("Loading...");
-				
-				getSchedule().previousWeek();
-				try {
-					getSchedule().getCourses();
-				} catch (Exception exception) {
-					textPanel.setText(exception.getMessage());
-				}
-				
-				String toPrint = getSchedule().printSchedule();
-				
-				textPanel.setText(toPrint);
-				
-			}
-		});
-		
-		
-		
+
+		next.addActionListener(this);
+
+		prev.addActionListener(this);
+
 		setLayout(new BorderLayout());
-		
+
 		add(prev, BorderLayout.WEST);
 		add(next, BorderLayout.EAST);
+	}
+
+	public void setDateField(DateField dateField) {
+		this.dateField = dateField;
+		this.dateField.setDate();
+
 		add(dateField, BorderLayout.CENTER);
+	}
+
+	public void setTextPanel(TextPanel textPanel) {
+		this.textPanel = textPanel;
+	}
+
+	public void actionPerformed(final ActionEvent e) {
+		new Thread(new Runnable() {
+			public void run() {
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						textPanel.setText("");
+						textPanel.setText("Loading...");
+					}
+				});
+
+				JButton clicked = (JButton) e.getSource();
+
+				if(clicked == prev) {
+					textPanel.printPrevWeek();
+					dateField.setDate();
+				}
+				else {
+					textPanel.printNextWeek();
+					dateField.setDate();
+				}
+			}
+		}).start();
+
+
 	}
 
 }

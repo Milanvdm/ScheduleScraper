@@ -66,6 +66,20 @@ public class CourseData implements Serializable {
 		}
 		return false;
 	}
+
+	public CourseTriple getLinkedTo(String courseName) {
+		for(CourseTriple toCheck: data) {
+			if(toCheck.getLinkedCourse().equals(courseName)) {
+				return toCheck;
+			}
+		}
+		return null;
+	}
+
+	public void removeAllData() {
+		data = new ArrayList<CourseTriple>();
+		
+	}
 	
 	
 

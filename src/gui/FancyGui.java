@@ -15,11 +15,6 @@ public class FancyGui {
 
 	private Schedule schedule;
 
-	private JFrame mainFrame;
-	private JLabel headerLabel;
-	private JLabel statusLabel;
-	private JPanel controlPanel;
-
 	public FancyGui() throws ClassNotFoundException, IOException{
 		schedule = new Schedule();
 		prepareGUI();
@@ -34,22 +29,6 @@ public class FancyGui {
 		
 	}
 
-	private class ButtonClickListener implements ActionListener{
-		
-		public void actionPerformed(ActionEvent e) {
-			String command = e.getActionCommand(); 
-			
-			if( command.equals( "Next" ))  {
-				statusLabel.setText("Next Button clicked.");
-			}
-			else if( command.equals( "Previous" ) )  {
-				statusLabel.setText("Previous Button clicked."); 
-			}
-			else  {
-				statusLabel.setText("Cancel Button clicked.");
-			}  	
-		}		
-	}
 }
 
 
