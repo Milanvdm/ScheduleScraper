@@ -4,23 +4,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
-
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.jaunt.MultipleFound;
-import com.jaunt.NotFound;
-import com.jaunt.ResponseException;
-import com.jaunt.SearchException;
+import java.util.Map;
 
 import schedule.Course;
 import schedule.Schedule;
-import scraper.CourseScraper;
-import scraper.CourseScraperImpl;
-import util.Browser;
-import util.BrowserImpl;
 
 
 public class UriTest {
@@ -28,13 +15,17 @@ public class UriTest {
 
 
 
-	public static void main(String[] args) throws URISyntaxException, IOException, ParseException, ClassNotFoundException, InterruptedException, NotFound, MultipleFound, FailingHttpStatusCodeException, ResponseException, SearchException {
+	public static void main(String[] args) throws URISyntaxException, IOException, ParseException, ClassNotFoundException, InterruptedException {
 
-		CourseScraperImpl scraper = new CourseScraperImpl();
+		Schedule schedule = new Schedule();
 		
-		scraper.getCourses(new Date());
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		
-		System.out.println();
+		schedule.addCourse("Vergelijkende studie van imperatieve programmeertalen");
+		
+		schedule.getCourses();
+		
+		System.out.println(schedule.printSchedule());
 		
 		System.exit(0);
 	}

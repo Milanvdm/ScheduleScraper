@@ -7,77 +7,37 @@ import java.util.List;
 public class CourseData implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	private List<CourseTriple> data = new ArrayList<CourseTriple>();
+	private List<String> data = new ArrayList<String>();
 	
-	public void addData(CourseTriple triple) {
-		data.add(triple);
+	public void addData(String courseName) {
+		data.add(courseName);
 	}
 	
-	public void removeData(CourseTriple triple) {
-		data.remove(triple);
+	public void removeData(String courseName) {
+		data.remove(courseName);
 	}
 	
 	public List<String> getAllCourses() {
-		List<String> toReturn = new ArrayList<String>();
-		
-		for(CourseTriple toCheck: data) {
-			toReturn.add(toCheck.getName());
-		}
-		
-		return toReturn;
+		return data;
 	}
 	
-	public CourseTriple getCourseTriple(String courseName) {
-		for(CourseTriple toCheck: data) {
-			if(toCheck.getName().equals(courseName)) {
-				return toCheck;
-			}
-		}
-		return null;
-	}
+	
 	
 	public boolean containsCourse(String courseName) {
-		for(CourseTriple toCheck: data) {
-			if(toCheck.getName().equals(courseName)) {
+		for(String toCheck: data) {
+			if(toCheck.equals(courseName)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public boolean containsUrl(String courseName) {
-		for(CourseTriple toCheck: data) {
-			if(toCheck.getName().equals(courseName)) {
-				if(toCheck.getUrl() != null) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 	
-	public boolean containsLinkedCourse(String courseName) {
-		for(CourseTriple toCheck: data) {
-			if(toCheck.getName().equals(courseName)) {
-				if(toCheck.getLinkedCourse() != null) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	public CourseTriple getLinkedTo(String courseName) {
-		for(CourseTriple toCheck: data) {
-			if(toCheck.getLinkedCourse().equals(courseName)) {
-				return toCheck;
-			}
-		}
-		return null;
-	}
+	
+	
 
 	public void removeAllData() {
-		data = new ArrayList<CourseTriple>();
+		data = new ArrayList<String>();
 		
 	}
 	

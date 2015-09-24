@@ -22,11 +22,13 @@ public class Main {
 				continue;
 
 			// split line into arguments
-			args = line.split(" ");  
+			args = line.split(" "); 
 
 			cli.parse(args);
 
 		}
+		
+		sc.close();
 
 
 

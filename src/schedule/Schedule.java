@@ -13,11 +13,12 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import scraper.CourseScraper;
 import scraper.CourseScraperImpl;
 import data.CourseData;
-import data.CourseTriple;
 
 public class Schedule {
 
@@ -50,33 +51,16 @@ public class Schedule {
 
 		courses = new ArrayList<Course>();
 
-		checkUrls();
+		Map<String, Course> foundCourses = scraper.getCourses(scheduleDate);
 
 		for(String courseName: data.getAllCourses()) {
-			CourseTriple triple = data.getCourseTriple(courseName);
 
-			if(triple.isLinked()) {
-				continue;
+			for (Entry<String, Course> e : foundCourses.entrySet()) {
+				if (e.getKey().contains(courseName)) {
+					courses.add(e.getValue());
+				}
 			}
 
-			String courseUrl = triple.getUrl();
-
-			Course course = new Course(courseName, courseUrl);
-
-			List<CourseMoment> toAdd = scraper.getCourseMoments(courseUrl, scheduleDate);
-
-			course.addCourseMoments(toAdd);
-
-
-			if(triple.getLinkedCourse() != null) {
-				CourseTriple linkedCourseTriple = data.getCourseTriple(triple.getLinkedCourse());
-
-				course.addCourseMoments(scraper.getCourseMoments(linkedCourseTriple.getUrl(), scheduleDate));
-
-				System.out.println("Added linked course-moments.");
-			}
-
-			courses.add(course);
 		}
 
 		System.out.println("Got info from all courses.");
@@ -110,12 +94,8 @@ public class Schedule {
 
 	public void removeCourse(String courseName) throws IOException {
 		if(data.containsCourse(courseName)) {
-			if(data.getCourseTriple(courseName).isLinked()) {
-				CourseTriple linkedTo = data.getLinkedTo(courseName);
-				unlinkCourses(linkedTo.getName(), courseName);
-			}
 
-			data.removeData(data.getCourseTriple(courseName));
+			data.removeData(courseName);
 
 			saveData();
 
@@ -125,52 +105,15 @@ public class Schedule {
 
 	public void addCourse(String courseName) throws IOException {
 		if(!data.containsCourse(courseName)) {
-			CourseTriple triple = new CourseTriple(courseName);
-			data.addData(triple);
+
+			data.addData(courseName);
 			saveData();
 
 			System.out.println("Added a new course.");
 		}
 	}
 
-	public void checkUrls() throws URISyntaxException, IOException {
 
-		for(String courseName: data.getAllCourses()) {
-			if(!data.containsUrl(courseName)) {
-				String courseUrl = scraper.getCourseUrl(courseName);
-
-				data.getCourseTriple(courseName).setUrl(courseUrl);
-			}
-		}
-
-		saveData();
-
-		System.out.println("Checked urls.");
-
-	}
-
-	public void linkCourses(String courseName, String toBeLinked) throws IOException {
-		if(data.containsCourse(toBeLinked)) {
-			data.getCourseTriple(courseName).setLinkedCourse(toBeLinked);
-
-			data.getCourseTriple(toBeLinked).setLinked(true);
-
-			saveData();
-		}
-
-	}
-
-	public void unlinkCourses(String courseName, String toBeUnLinked) throws IOException {
-		if(data.containsCourse(toBeUnLinked)) {
-			data.getCourseTriple(courseName).setLinkedCourse(null);
-
-			data.getCourseTriple(toBeUnLinked).setLinked(false);
-
-			saveData();
-		}
-
-
-	}
 
 	private CourseData readData() throws IOException, ClassNotFoundException {
 		CourseData data = null;
@@ -199,18 +142,11 @@ public class Schedule {
 
 		for(String courseName: data.getAllCourses()) {
 
-			if(data.getCourseTriple(courseName).isLinked() == true) {
-				continue;
-			}
-
 			sb.append("\n");
 
-			if(data.getCourseTriple(courseName).getLinkedCourse() != null) {
-				sb.append("[" + courseName + ", " + data.getCourseTriple(courseName).getLinkedCourse() + "]");
-			}
-			else {
-				sb.append(courseName);
-			}
+
+			sb.append(courseName);
+
 
 
 		}
