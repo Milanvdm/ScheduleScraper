@@ -56,7 +56,7 @@ public class Schedule {
 		for(String courseName: data.getAllCourses()) {
 
 			for (Entry<String, Course> e : foundCourses.entrySet()) {
-				if (e.getKey().contains(courseName)) {
+				if (e.getKey().toLowerCase().contains(courseName.toLowerCase())) {
 					courses.add(e.getValue());
 				}
 			}

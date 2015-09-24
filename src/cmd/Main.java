@@ -43,8 +43,6 @@ public class Main {
 				String string = builder.toString();
 
 				newArgs[1] = string;
-
-				System.out.println(string);
 				
 				cli.parse(newArgs);
 			}
