@@ -30,11 +30,11 @@ public class UriTest {
 
 	public static void main(String[] args) throws URISyntaxException, IOException, ParseException, ClassNotFoundException, InterruptedException, NotFound, MultipleFound, FailingHttpStatusCodeException, ResponseException, SearchException {
 
-		Browser browser = new BrowserImpl();
+		CourseScraperImpl scraper = new CourseScraperImpl();
 		
-		String html = browser.getScheduleHtml("https://webwsp.aps.kuleuven.be/sap(bD1lbiZjPTIwMA==)/public/bsp/sap/z_mijnuurrstrs/uurrooster_sem_lijst.htm", "51230411", "1 ");
+		scraper.getCourses(new Date());
 		
-		System.out.println(html);
+		System.out.println();
 		
 		System.exit(0);
 	}
