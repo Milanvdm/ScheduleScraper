@@ -49,10 +49,10 @@ public class CourseMoment implements Comparable<CourseMoment> {
 
 
 	public int compareTo(CourseMoment moment2) {
-		if(this.getStartTime().before(moment2.getDate())){
+		if(this.getStartTime().before(moment2.getStartTime())){
             return -1;
         }
-        if(this.getStartTime().after(moment2.getDate())){
+        if(this.getStartTime().after(moment2.getStartTime())){
             return 1;
         }
         return 0;
