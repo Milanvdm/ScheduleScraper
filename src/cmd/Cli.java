@@ -7,7 +7,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -34,13 +33,6 @@ public class Cli {
 		options.addOption("ac", "addCourse", true, "add a course.");
 		options.addOption("rc", "removeCourse", true, "remove a course.");
 		
-		Option linkOption = new Option("lc", "linkCourse", true, "link a course to another one.");
-		linkOption.setArgs(2);
-		options.addOption(linkOption);
-		
-		Option unlinkOption = new Option("uc", "unlinkCourse", true, "unlink a course from another one.");
-		unlinkOption.setArgs(2);
-		options.addOption(unlinkOption);
 		
 		System.out.println("Current week is: " + schedule.printCurrentWeek());
 		help();
@@ -97,18 +89,6 @@ public class Cli {
 				String courseName = cmd.getOptionValue("rc");
 				
 				schedule.removeCourse(courseName);
-			}
-			
-			if (cmd.hasOption("lc")) {
-				String[] options = cmd.getOptionValues("lc");
-				
-				schedule.linkCourses(options[0], options[1]);
-			}
-			
-			if (cmd.hasOption("uc")) {
-				String[] options = cmd.getOptionValues("uc");
-				
-				schedule.unlinkCourses(options[0], options[1]);
 			}
 			
 

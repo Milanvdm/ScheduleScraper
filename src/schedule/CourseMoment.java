@@ -10,8 +10,9 @@ public class CourseMoment implements Comparable<CourseMoment> {
 	private Date startTime;
 	private Date endTime;
 	
-	public CourseMoment(String location, Date startTime, Date endTime) {
+	public CourseMoment(String location, Date date, Date startTime, Date endTime) {
 		this.location = location;
+		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
@@ -31,9 +32,10 @@ public class CourseMoment implements Comparable<CourseMoment> {
 	
 	@Override
 	public String toString() {
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat sdfDate = new SimpleDateFormat("dd.MM.yyyy");
 		
-		return location + " - " + sdf.format(startTime) + " tot " + sdf.format(endTime);
+		return location + " - " + sdfDate.format(date) + ": " + sdfTime.format(startTime) + " tot " + sdfTime.format(endTime);
 	}
 
 	public Date getDate() {

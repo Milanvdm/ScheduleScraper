@@ -7,13 +7,11 @@ import java.util.List;
 public class Course {
 	
 	private String name;
-	private String url;
 
 	private List<CourseMoment> courseMoments = new ArrayList<CourseMoment>();;
 	
-	public Course(String name, String url) {
+	public Course(String name) {
 		this.name = name;
-		this.url = url;;
 	}
 	
 	public List<CourseMoment> getCourseMomentsOnWeekDay(int dayOfWeek) {
@@ -42,9 +40,6 @@ public class Course {
 		this.courseMoments.addAll(courseMoments);
 	}
 
-	public String getUrl() {
-		return url;
-	}
 
 
 	public String getName() {
@@ -54,9 +49,14 @@ public class Course {
 	
 	@Override
 	public String toString() {
-		String toReturn = "Name: " + name + " - " + url + "\n" + courseMoments.toString();
+		String toReturn = "Name: " + name + "\n" + courseMoments.toString();
 		
 		return toReturn;
+		
+	}
+
+	public void addCourseMoment(CourseMoment courseMoment) {
+		courseMoments.add(courseMoment);
 		
 	}
 	
