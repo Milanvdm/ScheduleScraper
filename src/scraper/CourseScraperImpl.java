@@ -103,8 +103,10 @@ public class CourseScraperImpl implements CourseScraper {
 	}
 
 	private void addCourse(Course foundCourse) {
-		if(foundCourses.containsKey(foundCourse.getName())) {
-			foundCourses.get(foundCourse.getName()).addCourseMoments(foundCourse.getCourseMoments());
+		if(foundCourses.containsKey(foundCourse.getName())) { 
+			if(!foundCourses.get(foundCourse.getName()).getCourseMoments().contains(foundCourse.getCourseMoments().get(0))) {
+				foundCourses.get(foundCourse.getName()).addCourseMoment(foundCourse.getCourseMoments().get(0));
+			}
 		}
 		else {
 			foundCourses.put(foundCourse.getName(), foundCourse);

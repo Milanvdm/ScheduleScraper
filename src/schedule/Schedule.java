@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -163,90 +164,140 @@ public class Schedule {
 		sb.append("===MAANDAG===");
 		sb.append("\n");
 
+		List<CourseMoment> toSort = new ArrayList<CourseMoment>();
+
 		for(Course course: courses) {
-			List<CourseMoment> toSort = course.getCourseMomentsOnWeekDay(2); //Sunday is 1
+			List<CourseMoment> courseMoments = course.getCourseMomentsOnWeekDay(2); //Sunday is 1
 
-			Collections.sort(toSort);
-
-			for(CourseMoment moment: toSort) {
-				sb.append(course.getName());
-				sb.append("\n");
-				sb.append("\t");
-				sb.append(moment.toString());
-				sb.append("\n");
+			for(CourseMoment moment: courseMoments) {
+				moment.setCourseName(course.getName());
 			}
+
+			toSort.addAll(courseMoments);
+
+
+		}
+
+		Collections.sort(toSort, CourseMoment.momentComparator);
+
+		for(CourseMoment moment: toSort) {
+			sb.append(moment.getCourseName());
+			sb.append("\n");
+			sb.append("\t");
+			sb.append(moment.toString());
+			sb.append("\n");
 		}
 
 		sb.append("\n");
 		sb.append("===DINSDAG===");
 		sb.append("\n");
 
+		toSort = new ArrayList<CourseMoment>();
+
 		for(Course course: courses) {
-			List<CourseMoment> toSort = course.getCourseMomentsOnWeekDay(3); //Sunday is 1
+			List<CourseMoment> courseMoments = course.getCourseMomentsOnWeekDay(3); //Sunday is 1
 
-			Collections.sort(toSort);
-
-			for(CourseMoment moment: toSort) {
-				sb.append(course.getName());
-				sb.append("\n");
-				sb.append("\t");
-				sb.append(moment.toString());
-				sb.append("\n");
+			for(CourseMoment moment: courseMoments) {
+				moment.setCourseName(course.getName());
 			}
+
+			toSort.addAll(courseMoments);
+
+
+		}
+
+		Collections.sort(toSort, CourseMoment.momentComparator);
+
+		for(CourseMoment moment: toSort) {
+			sb.append(moment.getCourseName());
+			sb.append("\n");
+			sb.append("\t");
+			sb.append(moment.toString());
+			sb.append("\n");
 		}
 
 		sb.append("\n");
 		sb.append("===WOENSDAG===");
 		sb.append("\n");
 
+		toSort = new ArrayList<CourseMoment>();
+
 		for(Course course: courses) {
-			List<CourseMoment> toSort = course.getCourseMomentsOnWeekDay(4); //Sunday is 1
+			List<CourseMoment> courseMoments = course.getCourseMomentsOnWeekDay(4); //Sunday is 1
 
-			Collections.sort(toSort);
-
-			for(CourseMoment moment: toSort) {
-				sb.append(course.getName());
-				sb.append("\n");
-				sb.append("\t");
-				sb.append(moment.toString());
-				sb.append("\n");
+			for(CourseMoment moment: courseMoments) {
+				moment.setCourseName(course.getName());
 			}
+
+			toSort.addAll(courseMoments);
+
+
+		}
+
+		Collections.sort(toSort, CourseMoment.momentComparator);
+
+		for(CourseMoment moment: toSort) {
+			sb.append(moment.getCourseName());
+			sb.append("\n");
+			sb.append("\t");
+			sb.append(moment.toString());
+			sb.append("\n");
 		}
 
 		sb.append("\n");
 		sb.append("===DONDERDAG===");
 		sb.append("\n");
 
+		toSort = new ArrayList<CourseMoment>();
+
 		for(Course course: courses) {
-			List<CourseMoment> toSort = course.getCourseMomentsOnWeekDay(5); //Sunday is 1
+			List<CourseMoment> courseMoments = course.getCourseMomentsOnWeekDay(5); //Sunday is 1
 
-			Collections.sort(toSort);
-
-			for(CourseMoment moment: toSort) {
-				sb.append(course.getName());
-				sb.append("\n");
-				sb.append("\t");
-				sb.append(moment.toString());
-				sb.append("\n");
+			for(CourseMoment moment: courseMoments) {
+				moment.setCourseName(course.getName());
 			}
+
+			toSort.addAll(courseMoments);
+
+
+		}
+
+		Collections.sort(toSort, CourseMoment.momentComparator);
+
+		for(CourseMoment moment: toSort) {
+			sb.append(moment.getCourseName());
+			sb.append("\n");
+			sb.append("\t");
+			sb.append(moment.toString());
+			sb.append("\n");
 		}
 
 		sb.append("\n");
 		sb.append("===VRIJDAG===");
 		sb.append("\n");
 
+		toSort = new ArrayList<CourseMoment>();
+
 		for(Course course: courses) {
-			List<CourseMoment> toSort = course.getCourseMomentsOnWeekDay(6); //Sunday is 1
+			List<CourseMoment> courseMoments = course.getCourseMomentsOnWeekDay(6); //Sunday is 1
 
-			Collections.sort(toSort);
-
-			for(CourseMoment moment: toSort) {
-				sb.append(course.getName());
-				sb.append("\n");
-				sb.append("\t");
-				sb.append(moment.toString());
-				sb.append("\n");
+			for(CourseMoment moment: courseMoments) {
+				moment.setCourseName(course.getName());
 			}
+
+			toSort.addAll(courseMoments);
+
+
+		}
+
+		Collections.sort(toSort, CourseMoment.momentComparator);
+
+		for(CourseMoment moment: toSort) {
+			sb.append(moment.getCourseName());
+			sb.append("\n");
+			sb.append("\t");
+			sb.append(moment.toString());
+			sb.append("\n");
 		}
 
 		sb.append("\n");
