@@ -22,7 +22,7 @@ public class Cli {
 		schedule = new Schedule(); //Dont start browser when schedule is made.
 
 		options.addOption("h", "help", false, "show help.");
-		options.addOption("e", "help", false, "exit.");
+		options.addOption("e", "exit", false, "exit.");
 		
 		options.addOption("nw", "nextWeek", false, "go to next week.");
 		options.addOption("pw", "prevWeek", false, "go to previous week.");
@@ -35,7 +35,7 @@ public class Cli {
 		
 		
 		System.out.println("Current week is: " + schedule.printCurrentWeek());
-		help();
+		System.out.println("For help, press -h or help");
 
 	}
 	
@@ -93,7 +93,7 @@ public class Cli {
 			
 
 		} catch (ParseException e) {
-			help();
+			System.out.println("Invalid command. For help, press -h or help");
 		}
 	}
 

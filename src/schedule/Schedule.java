@@ -119,7 +119,7 @@ public class Schedule {
 	private CourseData readData() throws IOException, ClassNotFoundException {
 		CourseData data = null;
 
-		FileInputStream fileIn = new FileInputStream("./CourseData/data.ser");
+		FileInputStream fileIn = new FileInputStream("data.ser");
 		ObjectInputStream in = new ObjectInputStream(fileIn);
 		data = (CourseData) in.readObject();
 		in.close();
@@ -129,7 +129,7 @@ public class Schedule {
 	}
 
 	private void saveData() throws IOException {
-		FileOutputStream fileOut = new FileOutputStream("./CourseData/data.ser");
+		FileOutputStream fileOut = new FileOutputStream("data.ser");
 		ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		out.writeObject(data);
 		out.close();
